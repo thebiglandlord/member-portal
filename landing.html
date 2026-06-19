@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Big Landlord — Member Access</title>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; color: #1A1D29; background: #fff; }
+  a { text-decoration: none; color: inherit; }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 60px;
+    border-bottom: 1px solid #EAEDF3;
+  }
+
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; }
+  .logo-mark { width: 30px; height: 30px; background: #2E5BFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 800; }
+
+  .nav-cta {
+    background: #1A1D29;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 90px 60px 70px;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #2E5BFF;
+    margin-bottom: 18px;
+  }
+
+  .hero-title {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title span { color: #2E5BFF; }
+
+  .hero-sub {
+    font-size: 17px;
+    color: #6B7280;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  .hero-cta-row { display: flex; gap: 14px; justify-content: center; }
+
+  .btn-primary {
+    background: #2E5BFF;
+    color: #fff;
+    border: none;
+    padding: 15px 28px;
+    border-radius: 9px;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover { background: #1E45E0; }
+
+  .btn-secondary {
+    background: #F4F6FB;
+    color: #1A1D29;
+    border: none;
+    padding: 15px 28px;
+    border-radius: 9px;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .hero-proof {
+    margin-top: 28px;
+    font-size: 13px;
+    color: #9CA3AF;
+  }
+
+  .hero-proof b { color: #1A1D29; }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    background: #1A1D29;
+    padding: 36px 60px;
+    display: flex;
+    justify-content: center;
+    gap: 70px;
+  }
+
+  .stats-item { text-align: center; }
+  .stats-num { font-size: 30px; font-weight: 800; color: #fff; }
+  .stats-num span { color: #F5B800; }
+  .stats-label { font-size: 12.5px; color: #9CA3AF; margin-top: 4px; }
+
+  /* ===== WHAT YOU GET ===== */
+  .section { padding: 80px 60px; max-width: 1080px; margin: 0 auto; }
+  .section-eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #2E5BFF; text-align: center; margin-bottom: 14px; }
+  .section-title { font-size: 32px; font-weight: 800; text-align: center; margin-bottom: 50px; letter-spacing: -0.5px; }
+
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .feature-card {
+    background: #F8F9FC;
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .feature-icon {
+    width: 42px;
+    height: 42px;
+    background: #EEF2FF;
+    color: #2E5BFF;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .feature-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .feature-desc { font-size: 13.5px; color: #6B7280; line-height: 1.6; }
+
+  /* ===== PRICING ===== */
+  .pricing-section { background: #F4F6FB; padding: 80px 60px; }
+  .pricing-card {
+    max-width: 420px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 18px;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(16,24,40,0.08);
+    border: 2px solid #2E5BFF;
+  }
+
+  .pricing-badge {
+    background: #EEF2FF;
+    color: #2E5BFF;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .pricing-name { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .pricing-desc { font-size: 13.5px; color: #6B7280; margin-bottom: 24px; }
+
+  .pricing-amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 28px; }
+  .pricing-num { font-size: 48px; font-weight: 800; }
+  .pricing-period { font-size: 14px; color: #6B7280; font-weight: 500; }
+
+  .pricing-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  .pricing-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: #374151; }
+  .check { width: 18px; height: 18px; background: #E1F5EE; color: #0F6E56; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+
+  .btn-checkout {
+    width: 100%;
+    background: #2E5BFF;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-checkout:hover { background: #1E45E0; }
+  .btn-checkout:disabled { background: #B6C2F2; cursor: not-allowed; }
+
+  .pricing-note { text-align: center; font-size: 12px; color: #9CA3AF; margin-top: 14px; }
+  .checkout-error { color: #DC2626; font-size: 12.5px; margin-top: 10px; text-align: center; display: none; }
+
+  .upsell-note {
+    text-align: center;
+    font-size: 13px;
+    color: #6B7280;
+    margin-top: 24px;
+  }
+
+  .upsell-note a { color: #2E5BFF; font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  .footer { padding: 40px 60px; text-align: center; font-size: 12.5px; color: #9CA3AF; border-top: 1px solid #EAEDF3; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="logo"><div class="logo-mark">BL</div>The Big Landlord</div>
+  <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Become a member</button>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Member access</div>
+  <div class="hero-title">From nothing to $23M.<br>Now you get the <span>playbook</span>.</div>
+  <div class="hero-sub">
+    Real seller leads, real investor contacts, and a real property manager network across Tampa, New Port Richey, Brandon, and Albany.
+    Built from the deals that got me here, handed to you.
+  </div>
+  <div class="hero-cta-row">
+    <button class="btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get member access</button>
+    <button class="btn-secondary" onclick="document.getElementById('whats-inside').scrollIntoView({behavior:'smooth'})">See what's inside</button>
+  </div>
+  <div class="hero-proof">Trusted by landlords and investors across <b>4 active markets</b></div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-item"><div class="stats-num"><span>312</span></div><div class="stats-label">Properties tracked</div></div>
+  <div class="stats-item"><div class="stats-num">214</div><div class="stats-label">Active seller leads</div></div>
+  <div class="stats-item"><div class="stats-num">38</div><div class="stats-label">Investor contacts</div></div>
+  <div class="stats-item"><div class="stats-num">56</div><div class="stats-label">Property managers</div></div>
+</div>
+
+<div class="section" id="whats-inside">
+  <div class="section-eyebrow">What's inside</div>
+  <div class="section-title">Everything you need to find your next deal</div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">SL</div>
+      <div class="feature-title">Seller leads</div>
+      <div class="feature-desc">Motivated sellers, pre-foreclosures, inherited properties, and tired landlords across all active markets, updated continuously.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">IC</div>
+      <div class="feature-title">Investor contacts</div>
+      <div class="feature-desc">A vetted network of capital partners with their deal history, focus area, and how much they've deployed.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">PM</div>
+      <div class="feature-title">PM directory</div>
+      <div class="feature-desc">Property managers who already manage units in your target markets, ready to take on more.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">ZB</div>
+      <div class="feature-title">Market breakdowns</div>
+      <div class="feature-desc">See exactly what's available by zip code, rentals, apartments, leased, and pending, broken down at a glance.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">EV</div>
+      <div class="feature-title">Events and speaking</div>
+      <div class="feature-desc">Get plugged into real estate meetups, panels, and forums happening in your market.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">RV</div>
+      <div class="feature-title">Resource vault</div>
+      <div class="feature-desc">Training videos, market news, and downloadable tools, including the exact frameworks used to scale to $23M.</div>
+    </div>
+  </div>
+</div>
+
+<div class="pricing-section" id="pricing">
+  <div class="section-eyebrow">Membership</div>
+  <div class="section-title">One plan. Full access.</div>
+
+  <div class="pricing-card">
+    <div class="pricing-badge">Founding member pricing</div>
+    <div class="pricing-name">The Big Landlord Membership</div>
+    <div class="pricing-desc">Full portal access, updated continuously.</div>
+
+    <div class="pricing-amount">
+      <div class="pricing-num">$97</div>
+      <div class="pricing-period">/ month</div>
+    </div>
+
+    <div class="pricing-features">
+      <div class="pricing-feature"><span class="check">&#10003;</span>Full access to seller leads, updated continuously</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Investor contact directory</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Property manager directory</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Zip code market breakdowns</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Speaking and event opportunities</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Full training library and resource vault</div>
+      <div class="pricing-feature"><span class="check">&#10003;</span>Cancel anytime</div>
+    </div>
+
+    <button class="btn-checkout" id="checkoutBtn" onclick="handleCheckout()">Get member access</button>
+    <div class="checkout-error" id="checkoutError">Something went wrong. Please try again.</div>
+    <div class="pricing-note">Secure checkout powered by Stripe</div>
+  </div>
+
+  <div class="upsell-note">
+    Looking for direct coaching and a smaller group? <a href="#" onclick="return false;">Ask about Inner Circle access</a>
+  </div>
+</div>
+
+<div class="footer">
+  Bois Enterprises, LLC &middot; The Big Landlord &middot; <a href="#">Contact</a>
+</div>
+
+<script>
+  // ============================================
+  // STRIPE CONFIG — replace with real values
+  // ============================================
+  const STRIPE_PUBLISHABLE_KEY = 'pk_live_YOUR_PUBLISHABLE_KEY';
+  const STRIPE_PRICE_ID = 'price_YOUR_PRICE_ID';
+  // This should point to your own backend endpoint that creates a Stripe
+  // Checkout Session server-side (Stripe requires a secret key call from
+  // a server, never from this page). Example serverless function or
+  // Supabase Edge Function route:
+  const CHECKOUT_SESSION_ENDPOINT = 'YOUR_BACKEND_ENDPOINT/create-checkout-session';
+
+  const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+  async function handleCheckout() {
+    const btn = document.getElementById('checkoutBtn');
+    const errorEl = document.getElementById('checkoutError');
+    errorEl.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Redirecting…';
+
+    try {
+      const response = await fetch(CHECKOUT_SESSION_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: STRIPE_PRICE_ID })
+      });
+
+      const session = await response.json();
+
+      if (session.error) throw new Error(session.error);
+
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+
+      if (result.error) throw new Error(result.error.message);
+
+    } catch (err) {
+      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Get member access';
+    }
+  }
+</script>
+
+</body>
+</html>
